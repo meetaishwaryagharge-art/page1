@@ -1,0 +1,1882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DeCargo - Delivery Logistic</title>
+
+  <!-- Google Fonts: Oswald (Headings), Playfair Display (Serif Eyebrows), Inter (Clean Body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&family=Playfair+Display:ital,wght@1,500;1,600;1,700&display=swap" rel="stylesheet" />
+
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Font Awesome 6 Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+
+  <style>
+    /* =========================================================
+       GLOBAL THEME & RESET
+    ========================================================= */
+    :root {
+      --primary-navy: #0b345f;
+      --secondary-dark-navy: #072242;
+      --brand-orange: #f39c12;
+      --brand-orange-hover: #e08b07;
+      --brand-accent-red: #c0292b;
+      --text-muted: #6e7987;
+      --bg-light: #f7f9fa;
+      --footer-bg: #212121;
+      --footer-bottom-bg: #1a1a1a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: #333333;
+      background-color: #ffffff;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, .brand-heading {
+      font-family: 'Oswald', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: -0.3px;
+    }
+
+    .eyebrow-serif {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      letter-spacing: 0.2px;
+      margin-bottom: 6px;
+    }
+
+    .eyebrow-red {
+      color: var(--brand-accent-red);
+    }
+
+    .eyebrow-orange {
+      color: var(--brand-orange);
+    }
+
+    .btn-orange {
+      background-color: var(--brand-orange);
+      color: #1a1a1a;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      padding: 10px 24px;
+      border: none;
+      border-radius: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .btn-orange:hover {
+      background-color: var(--brand-orange-hover);
+      color: #000000;
+      transform: translateY(-2px);
+    }
+
+    /* =========================================================
+       1. TOP BAR
+    ========================================================= */
+    .top-bar {
+      background-color: #082442;
+      color: #d2dbe6;
+      font-size: 0.82rem;
+      padding: 7px 0;
+    }
+
+    .top-bar a {
+      color: #d2dbe6;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .top-bar a:hover {
+      color: var(--brand-orange);
+    }
+
+    .top-bar-social a {
+      margin-left: 14px;
+      font-size: 0.82rem;
+    }
+
+    /* =========================================================
+       2. MAIN NAVBAR
+    ========================================================= */
+    .main-navbar {
+      background-color: #ffffff;
+      padding: 14px 0;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+
+    .brand-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .brand-name {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: var(--primary-navy);
+      line-height: 1;
+    }
+
+    .brand-sub {
+      font-size: 0.65rem;
+      color: var(--brand-accent-red);
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      display: block;
+      margin-top: 2px;
+    }
+
+    .navbar-nav .nav-link {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: #2b394a;
+      padding: 8px 16px !important;
+      position: relative;
+    }
+
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link.active {
+      color: var(--primary-navy);
+    }
+
+    .navbar-nav .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 16px;
+      right: 16px;
+      height: 2px;
+      background-color: var(--brand-accent-red);
+    }
+
+    /* =========================================================
+       3. HERO BANNER & BOTTOM OVERLAP CARDS
+    ========================================================= */
+    .hero-section {
+      position: relative;
+      background: #091b2e url('https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=1920&q=80') center center / cover no-repeat;
+      padding: 130px 0 170px 0;
+      color: #ffffff;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(7, 34, 66, 0.92) 0%, rgba(7, 34, 66, 0.72) 55%, rgba(7, 34, 66, 0.4) 100%);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 620px;
+    }
+
+    .hero-title {
+      font-size: 3.4rem;
+      font-weight: 700;
+      line-height: 1.08;
+      margin-bottom: 20px;
+    }
+
+    .hero-desc {
+      font-size: 0.95rem;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.88);
+      margin-bottom: 28px;
+      max-width: 520px;
+    }
+
+    /* Overlapping Bottom Cards */
+    .hero-overlap-section {
+      position: relative;
+      z-index: 4;
+      margin-top: -95px;
+      margin-bottom: 70px;
+    }
+
+    .hero-card {
+      background: #ffffff;
+      padding: 32px 24px;
+      height: 100%;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .hero-card-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.35rem;
+      color: var(--primary-navy);
+      margin-bottom: 12px;
+      font-weight: 700;
+      text-transform: none;
+    }
+
+    .hero-card-text {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .hero-card-link {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.6px;
+      color: var(--brand-accent-red);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .hero-card-link:hover {
+      color: var(--brand-orange);
+    }
+
+    /* Track Your Shipment Box */
+    .track-box {
+      background-color: var(--primary-navy);
+      color: #ffffff;
+      padding: 36px 30px;
+      height: 100%;
+      box-shadow: 0 10px 30px rgba(7, 34, 66, 0.25);
+    }
+
+    .track-box-title {
+      font-size: 1.65rem;
+      color: #ffffff;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .track-input-group {
+      display: flex;
+      margin-bottom: 16px;
+    }
+
+    .track-input {
+      flex: 1;
+      height: 48px;
+      border: none;
+      padding: 0 16px;
+      font-size: 0.88rem;
+      outline: none;
+    }
+
+    .track-btn {
+      width: 50px;
+      background-color: var(--brand-orange);
+      border: none;
+      color: #1a1a1a;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .track-btn:hover {
+      background-color: var(--brand-orange-hover);
+    }
+
+    .track-subtext {
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.75);
+      line-height: 1.55;
+    }
+
+    /* =========================================================
+       4. ABOUT COMPANY & STATS IN NUMBER
+    ========================================================= */
+    .about-section {
+      padding: 60px 0 90px 0;
+    }
+
+    .about-img-container {
+      position: relative;
+      padding-bottom: 80px;
+    }
+
+    .about-main-img {
+      width: 82%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    .about-badge {
+      position: absolute;
+      top: 25px;
+      left: 25px;
+      background-color: #ffffff;
+      padding: 24px 28px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+      text-align: center;
+      z-index: 2;
+    }
+
+    .about-badge-num {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--brand-accent-red);
+      line-height: 1;
+    }
+
+    .about-badge-text {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.95rem;
+      color: var(--primary-navy);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .about-secondary-img {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 58%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      border: 8px solid #ffffff;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+      z-index: 3;
+    }
+
+    .about-heading {
+      font-size: 2.65rem;
+      font-weight: 700;
+      color: var(--primary-navy);
+      line-height: 1.15;
+      margin-bottom: 18px;
+    }
+
+    .about-desc {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .about-service-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .service-arrow-icon {
+      color: var(--brand-orange);
+      font-size: 1.25rem;
+      margin-top: 3px;
+    }
+
+    .about-service-item h4 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary-navy);
+      margin-bottom: 4px;
+      text-transform: none;
+    }
+
+    .about-service-item p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    /* Numbers Banner */
+    .numbers-banner {
+      background: linear-gradient(90deg, #072b54 0%, #0d3b6c 50%, #092f58 100%);
+      color: #ffffff;
+      padding: 60px 0;
+    }
+
+    .numbers-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      line-height: 1.08;
+      border-right: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .stat-number {
+      font-family: 'Oswald', sans-serif;
+      font-size: 3.2rem;
+      font-weight: 700;
+      color: var(--brand-orange);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 0.92rem;
+      color: #ffffff;
+      font-weight: 500;
+    }
+
+    /* =========================================================
+       5. WHAT WE OFFER (8 CARDS)
+    ========================================================= */
+    .services-grid-section {
+      padding: 95px 0 90px 0;
+      background-color: #ffffff;
+    }
+
+    .section-title {
+      font-size: 2.75rem;
+      font-weight: 700;
+      color: var(--primary-navy);
+      line-height: 1.15;
+    }
+
+    .offer-card {
+      background: #ffffff;
+      border: 1px solid #ebebeb;
+      border-bottom: 3px solid var(--primary-navy);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .offer-card:hover {
+      transform: translateY(-6px);
+      border-bottom-color: var(--brand-orange);
+      box-shadow: 0 14px 28px rgba(11, 52, 95, 0.12);
+    }
+
+    .offer-img-wrap {
+      aspect-ratio: 16/10;
+      overflow: hidden;
+    }
+
+    .offer-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .offer-card:hover .offer-img-wrap img {
+      transform: scale(1.06);
+    }
+
+    .offer-body {
+      padding: 24px 20px 28px 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .offer-card-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--primary-navy);
+      margin-bottom: 12px;
+      text-transform: none;
+    }
+
+    .offer-card-text {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      margin-bottom: 22px;
+      flex-grow: 1;
+    }
+
+    .offer-btn {
+      align-self: center;
+      padding: 8px 22px;
+      font-size: 0.82rem;
+    }
+
+    /* =========================================================
+       6. COMPETITIVE ADVANTAGES & WHY CHOOSE US
+    ========================================================= */
+    .advantages-section {
+      position: relative;
+      background: #06192d url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1920&q=80') center center / cover no-repeat;
+      padding: 100px 0;
+      color: #ffffff;
+    }
+
+    .advantages-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(7, 30, 58, 0.93) 0%, rgba(9, 44, 82, 0.88) 100%);
+      z-index: 1;
+    }
+
+    .advantages-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Circular Progress Meters */
+    .progress-circle-wrap {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .progress-svg {
+      width: 120px;
+      height: 120px;
+      transform: rotate(-90deg);
+    }
+
+    .progress-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.15);
+      stroke-width: 6;
+    }
+
+    .progress-bar-meter {
+      fill: none;
+      stroke: var(--brand-orange);
+      stroke-width: 6;
+      stroke-linecap: round;
+      stroke-dasharray: 283;
+      stroke-dashoffset: 283;
+      transition: stroke-dashoffset 1.4s ease-out;
+    }
+
+    .circle-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-top: 8px;
+    }
+
+    .circle-center-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    /* Why Choose Us */
+    .why-choose-section {
+      padding: 95px 0;
+      background-color: #ffffff;
+    }
+
+    .why-feature-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 32px;
+    }
+
+    .why-icon {
+      font-size: 1.85rem;
+      color: var(--brand-orange);
+      flex-shrink: 0;
+    }
+
+    .why-feature-box h4 {
+      font-size: 1.25rem;
+      color: var(--primary-navy);
+      font-weight: 700;
+      margin-bottom: 6px;
+      text-transform: none;
+    }
+
+    .why-feature-box p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* =========================================================
+       7. INDUSTRIES & VIDEO CTA
+    ========================================================= */
+    .industries-section {
+      background-color: #f7f9fa;
+      padding: 90px 0;
+      position: relative;
+    }
+
+    .industry-card {
+      background: #ffffff;
+      padding: 38px 24px;
+      text-align: center;
+      height: 100%;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+      border-bottom: 2px solid transparent;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .industry-card:hover {
+      transform: translateY(-5px);
+      border-bottom-color: var(--brand-orange);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .industry-card.featured-card {
+      background: linear-gradient(145deg, #07386d, #004d99);
+      color: #ffffff;
+    }
+
+    .industry-icon {
+      font-size: 2.2rem;
+      color: var(--brand-orange);
+      margin-bottom: 18px;
+    }
+
+    .industry-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--primary-navy);
+      margin-bottom: 10px;
+      text-transform: none;
+    }
+
+    .featured-card .industry-title {
+      color: #ffffff;
+    }
+
+    .industry-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .featured-card .industry-desc {
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    /* Maritime Video CTA */
+    .maritime-cta {
+      position: relative;
+      background: #082442 url('https://images.unsplash.com/photo-1505705694340-019e1e335916?auto=format&fit=crop&w=1920&q=80') center center / cover no-repeat;
+      padding: 100px 0;
+      color: #ffffff;
+    }
+
+    .maritime-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(8, 36, 66, 0.94) 0%, rgba(8, 36, 66, 0.75) 60%, rgba(8, 36, 66, 0.5) 100%);
+      z-index: 1;
+    }
+
+    .maritime-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .play-pulse-btn {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background-color: #ffffff;
+      color: var(--primary-navy);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      cursor: pointer;
+      position: relative;
+      border: none;
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5);
+      animation: pulsePlay 1.8s infinite;
+      transition: transform 0.2s;
+    }
+
+    .play-pulse-btn:hover {
+      transform: scale(1.1);
+      color: var(--brand-orange);
+    }
+
+    @keyframes pulsePlay {
+      0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.6); }
+      70% { box-shadow: 0 0 0 22px rgba(255, 255, 255, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+    }
+
+    /* =========================================================
+       8. OUR PORTFOLIO & TESTIMONIALS
+    ========================================================= */
+    .portfolio-section {
+      padding: 95px 0;
+      background-color: #ffffff;
+    }
+
+    .portfolio-card {
+      background: #ffffff;
+      border: 1px solid #ebebeb;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease;
+    }
+
+    .portfolio-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 14px 28px rgba(11, 52, 95, 0.12);
+    }
+
+    .portfolio-img-wrap {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 16/10;
+    }
+
+    .portfolio-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .portfolio-card:hover .portfolio-img-wrap img {
+      transform: scale(1.06);
+    }
+
+    .portfolio-badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background-color: var(--brand-orange);
+      color: #1a1a1a;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 2px;
+      z-index: 2;
+    }
+
+    .portfolio-body {
+      padding: 24px 22px;
+      border-left: 3px solid var(--primary-navy);
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .portfolio-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--primary-navy);
+      margin-bottom: 12px;
+      text-transform: none;
+    }
+
+    .portfolio-readmore {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--brand-accent-red);
+      text-decoration: none;
+      letter-spacing: 0.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .portfolio-readmore:hover {
+      color: var(--brand-orange);
+      transform: translateX(4px);
+    }
+
+    /* Testimonials */
+    .testimonials-section {
+      position: relative;
+      background: #06182c url('https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1920&q=80') center center / cover no-repeat;
+      padding: 100px 0;
+      color: #ffffff;
+    }
+
+    .testimonials-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(7, 30, 58, 0.9);
+      z-index: 1;
+    }
+
+    .testimonials-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .testimonial-divider {
+      width: 60px;
+      height: 2px;
+      background-color: #ffffff;
+      margin: 12px auto 28px auto;
+    }
+
+    .testimonial-quote {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.15rem;
+      line-height: 1.85;
+      max-width: 800px;
+      margin: 0 auto 24px auto;
+      color: rgba(255, 255, 255, 0.94);
+    }
+
+    .testimonial-author {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .testimonial-role {
+      font-size: 0.85rem;
+      color: var(--brand-orange);
+      font-weight: 600;
+    }
+
+    /* =========================================================
+       9. PARTNERS, NEWSLETTER & FOOTER
+    ========================================================= */
+    .partners-section {
+      background-color: #ffffff;
+      padding: 45px 0;
+      border-bottom: 1px solid #ebebeb;
+    }
+
+    .partner-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.65;
+      transition: opacity 0.25s, transform 0.25s;
+      filter: grayscale(100%);
+    }
+
+    .partner-item:hover {
+      opacity: 1;
+      filter: grayscale(0%);
+      transform: translateY(-2px);
+    }
+
+    /* Newsletter */
+    .newsletter-section {
+      position: relative;
+      background: #101820 url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1920&q=80') center center / cover no-repeat;
+      padding: 95px 0;
+      color: #ffffff;
+    }
+
+    .newsletter-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(14, 21, 31, 0.82);
+      z-index: 1;
+    }
+
+    .newsletter-content {
+      position: relative;
+      z-index: 2;
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    .newsletter-input-group {
+      display: flex;
+      max-width: 540px;
+      margin: 0 auto;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .newsletter-input {
+      flex: 1;
+      height: 50px;
+      padding: 0 20px;
+      font-size: 0.92rem;
+      border: none;
+      outline: none;
+    }
+
+    /* Main Footer */
+    .footer-main {
+      background-color: var(--footer-bg);
+      color: #a8a8a8;
+      padding: 70px 0 50px 0;
+      font-size: 0.9rem;
+    }
+
+    .footer-col-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 20px;
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+
+    .footer-links a {
+      color: #cccccc;
+      text-decoration: none;
+      font-size: 0.88rem;
+      transition: color 0.2s, padding-left 0.2s;
+      display: inline-block;
+    }
+
+    .footer-links a:hover {
+      color: var(--brand-orange);
+      padding-left: 4px;
+    }
+
+    .social-btn {
+      width: 34px;
+      height: 34px;
+      border: 1px solid #3d3d3d;
+      color: #8c8c8c;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+
+    .social-btn:hover {
+      border-color: var(--brand-orange);
+      background-color: var(--brand-orange);
+      color: #ffffff;
+    }
+
+    .footer-bottom {
+      background-color: var(--footer-bottom-bg);
+      padding: 22px 0;
+      font-size: 0.82rem;
+      color: #7a7a7a;
+      border-top: 1px solid #292929;
+    }
+
+    .footer-bottom a {
+      color: #8c8c8c;
+      text-decoration: none;
+      margin: 0 8px;
+    }
+
+    .footer-bottom a:hover {
+      color: #ffffff;
+    }
+
+    @media (max-width: 991px) {
+      .hero-title { font-size: 2.5rem; }
+      .numbers-title { border-right: none; margin-bottom: 25px; }
+      .about-img-container { margin-bottom: 40px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       1. TOP BAR
+  ========================================================= -->
+  <div class="top-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-4">
+        <span><i class="fa-solid fa-phone me-2 text-warning"></i> +6221.2002.2012</span>
+        <span class="d-none d-md-inline"><i class="fa-regular fa-envelope me-2 text-warning"></i> support@yourdomain.tld</span>
+      </div>
+      <div class="top-bar-social">
+        <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#"><i class="fa-brands fa-twitter"></i></a>
+        <a href="#"><i class="fa-brands fa-youtube"></i></a>
+        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#"><i class="fa-brands fa-behance"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       2. MAIN NAVBAR
+  ========================================================= -->
+  <nav class="navbar navbar-expand-lg main-navbar sticky-top">
+    <div class="container">
+      <a class="brand-logo-wrap" href="#">
+        <svg width="44" height="34" viewBox="0 0 54 44" fill="none">
+          <path d="M4 8 L24 22 L4 36 Z" fill="#c0292b" />
+          <path d="M18 8 L38 22 L18 36 Z" fill="#0b5cab" />
+          <path d="M32 8 L52 22 L32 36 Z" fill="#07386d" />
+        </svg>
+        <div>
+          <span class="brand-name">DeCargo</span>
+          <span class="brand-sub">DELIVERY LOGISTIC</span>
+        </div>
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#services" data-bs-toggle="dropdown">Services</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#services">Air Freight</a></li>
+              <li><a class="dropdown-item" href="#services">Road Transport</a></li>
+              <li><a class="dropdown-item" href="#services">Ocean Freight</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Pages</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#portfolio">Our Portfolio</a></li>
+              <li><a class="dropdown-item" href="#testimonials">Testimonials</a></li>
+            </ul>
+          </li>
+          <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+            <a href="#quote" class="btn-orange">GET A QUOTE</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- =========================================================
+       3. HERO SECTION & BOTTOM CARDS
+  ========================================================= -->
+  <section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+      <h1 class="hero-title">CONNECT YOUR BUSINESS TO A WORLD OF POSSIBILITIES</h1>
+      <p class="hero-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
+      <a href="#services" class="btn-orange"><i class="fa-solid fa-gear"></i> VIEW SERVICES</a>
+    </div>
+  </section>
+
+  <!-- Hero Bottom Overlap 4-Column Box -->
+  <section class="hero-overlap-section">
+    <div class="container">
+      <div class="row g-0">
+        <div class="col-lg-3 col-md-6">
+          <div class="hero-card">
+            <div>
+              <h3 class="hero-card-title">Supply Chain Solutions</h3>
+              <p class="hero-card-text">Adipiscing mollis volutpat ornare elit placerat phasellus viverra ligula.</p>
+            </div>
+            <a href="#services" class="hero-card-link">LEARN MORE &raquo;</a>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <div class="hero-card border-start">
+            <div>
+              <h3 class="hero-card-title">End-to-End Transportation</h3>
+              <p class="hero-card-text">Adipiscing mollis volutpat ornare elit placerat phasellus viverra ligula.</p>
+            </div>
+            <a href="#services" class="hero-card-link">LEARN MORE &raquo;</a>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <div class="hero-card border-start">
+            <div>
+              <h3 class="hero-card-title">Contract Logistics</h3>
+              <p class="hero-card-text">Adipiscing mollis volutpat ornare elit placerat phasellus viverra ligula.</p>
+            </div>
+            <a href="#services" class="hero-card-link">LEARN MORE &raquo;</a>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <div class="track-box">
+            <h3 class="track-box-title">Track Your Shipment</h3>
+            <form id="trackForm" class="track-input-group">
+              <input type="text" class="track-input" placeholder="Insert tracking number here..." required />
+              <button type="submit" class="track-btn"><i class="fa-solid fa-arrow-right"></i></button>
+            </form>
+            <p class="track-subtext">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       4. ABOUT COMPANY & NUMBERS
+  ========================================================= -->
+  <section class="about-section" id="about">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+          <div class="about-img-container">
+            <div class="about-badge">
+              <div class="about-badge-num">25+</div>
+              <div class="about-badge-text">Years of Experience</div>
+            </div>
+            <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=700&q=80" alt="Reachstacker Crane" class="about-main-img" />
+            <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80" alt="Engineers" class="about-secondary-img" />
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="eyebrow-serif eyebrow-red">About Company</div>
+          <h2 class="about-heading">Logistics that is dedicated to your company</h2>
+          <p class="about-desc">Ornare erat habitasse tempus dui cubilia phasellus consequat ut risus. Mus dui penatibus ultrices placerat luctus habitasse maximus pulvinar elementum.</p>
+
+          <div class="about-service-item">
+            <i class="fa-solid fa-arrow-up-right-from-square service-arrow-icon"></i>
+            <div>
+              <h4>Global Service</h4>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
+            </div>
+          </div>
+
+          <div class="about-service-item">
+            <i class="fa-solid fa-arrow-up-right-from-square service-arrow-icon"></i>
+            <div>
+              <h4>Local Service</h4>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
+            </div>
+          </div>
+
+          <a href="#services" class="btn-orange mt-3">DISCOVER MORE</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Banner -->
+  <section class="numbers-banner">
+    <div class="container">
+      <div class="row align-items-center text-center text-lg-start">
+        <div class="col-lg-4">
+          <h2 class="numbers-title">Our Company In<br />Number</h2>
+        </div>
+        <div class="col-lg-8">
+          <div class="row text-center g-4">
+            <div class="col-4">
+              <div class="stat-number counter" data-target="1350">0</div>
+              <div class="stat-label">Offices &amp; Logistic Facilities</div>
+            </div>
+            <div class="col-4">
+              <div class="stat-number"><span class="counter" data-target="80">0</span>+</div>
+              <div class="stat-label">Countries Worldwide</div>
+            </div>
+            <div class="col-4">
+              <div class="stat-number"><span class="counter" data-target="65000">0</span>+</div>
+              <div class="stat-label">Professional Workers</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       5. WHAT WE OFFER (8 CARDS)
+  ========================================================= -->
+  <section class="services-grid-section" id="services">
+    <div class="container text-center">
+      <div class="eyebrow-serif eyebrow-red">What We Offer</div>
+      <h2 class="section-title mb-3">Empower your business with better logistics</h2>
+      <p class="text-muted mx-auto mb-5" style="max-width: 620px; font-size: 0.95rem;">
+        A non pretium litora adipiscing velit. Felis amet per eros platea ullamcorper a.
+      </p>
+
+      <div class="row g-4">
+        <!-- 1 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="offer-card">
+            <div class="offer-img-wrap"><img src="https://images.unsplash.com/photo-1542296332-2e4473faf563?auto=format&fit=crop&w=600&q=80" alt="Air Freight" /></div>
+            <div class="offer-body">
+              <h3 class="offer-card-title">Air Freight</h3>
+              <p class="offer-card-text">Laoreet aliquet suscipit si finibus metus amet litora dapibus scelerisque cursus consectetur.</p>
+              <a href="#quote" class="btn-orange offer-btn">LEARN MORE</a>
+            </div>
+          </div>
+        </div>
+        <!-- 2 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="offer-card">
+            <div class="offer-img-wrap"><img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=600&q=80" alt="Road Transport" /></div>
+            <div class="offer-body">
+              <h3 class="offer-card-title">Road Transport</h3>
+              <p class="offer-card-text">Laoreet aliquet suscipit si finibus metus amet litora dapibus scelerisque cursus consectetur.</p>
+              <a href="#quote" class="btn-orange offer-btn">LEARN MORE</a>
+            </div>
+          </div>
+        </div>
+        <!-- 3 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="offer-card">
+            <div class="offer-img-wrap"><img src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=600&q=80" alt="Ocean Freight" /></div>
+            <div class="offer-body">
+              <h3 class="offer-card-title">Ocean Freight</h3>
+              <p class="offer-card-text">Laoreet aliquet suscipit si finibus metus amet litora dapibus scelerisque cursus consectetur.</p>
+              <a href="#quote" class="btn-orange offer-btn">LEARN MORE</a>
+            </div>
+          </div>
+        </div>
+        <!-- 4 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="offer-card">
+            <div class="offer-img-wrap"><img src="https://images.unsplash.com/photo-1541427468627-a89a96e5ca1d?auto=format&fit=crop&w=600&q=80" alt="Rail Freight" /></div>
+            <div class="offer-body">
+              <h3 class="offer-card-title">Rail Freight</h3>
+              <p class="offer-card-text">Laoreet aliquet suscipit si finibus metus amet litora dapibus scelerisque cursus consectetur.</p>
+              <a href="#quote" class="btn-orange offer-btn">LEARN MORE</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="offer-card">
+            <div class="offer-img-wrap"><img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=600&q=80" alt="Warehousing" /></div>
+            <div class="offer-body">
+              <h3 class="offer-card-title">Warehousing</h3>
+              <p class="offer-card-text">Laoreet aliquet suscipit si finibus metus amet litora dapibus scelerisque cursus consectetur.</p>
+              <a href="#quote" class="btn-orange offer-btn">LEARN MORE</a>
+            </div>
+          </div>
+        </div>
+        <!-- 6 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="offer-card">
+            <div class="offer-img-wrap"><img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=600&q=80" alt="Packaging" /></div>
+            <div class="offer-body">
+              <h3 class="offer-card-title">Packaging</h3>
+              <p class="offer-card-text">Laoreet aliquet suscipit si finibus metus amet litora dapibus scelerisque cursus consectetur.</p>
+              <a href="#quote" class="btn-orange offer-btn">LEARN MORE</a>
+            </div>
+          </div>
+        </div>
+        <!-- 7 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="offer-card">
+            <div class="offer-img-wrap"><img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80" alt="Logistics Solution" /></div>
+            <div class="offer-body">
+              <h3 class="offer-card-title">Logistics Solution</h3>
+              <p class="offer-card-text">Laoreet aliquet suscipit si finibus metus amet litora dapibus scelerisque cursus consectetur.</p>
+              <a href="#quote" class="btn-orange offer-btn">LEARN MORE</a>
+            </div>
+          </div>
+        </div>
+        <!-- 8 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="offer-card">
+            <div class="offer-img-wrap"><img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=600&q=80" alt="Cargo Insurance" /></div>
+            <div class="offer-body">
+              <h3 class="offer-card-title">Cargo Insurance</h3>
+              <p class="offer-card-text">Laoreet aliquet suscipit si finibus metus amet litora dapibus scelerisque cursus consectetur.</p>
+              <a href="#quote" class="btn-orange offer-btn">LEARN MORE</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       6. COMPETITIVE ADVANTAGES & WHY CHOOSE US
+  ========================================================= -->
+  <section class="advantages-section">
+    <div class="advantages-overlay"></div>
+    <div class="container advantages-content">
+      <div class="row align-items-center g-5">
+        <!-- Progress Circles -->
+        <div class="col-lg-6">
+          <div class="row text-center g-4">
+            <div class="col-6">
+              <div class="progress-circle-wrap">
+                <div class="position-relative d-inline-block">
+                  <svg class="progress-svg" viewBox="0 0 100 100">
+                    <circle class="progress-bg" cx="50" cy="50" r="45"></circle>
+                    <circle class="progress-bar-meter" data-percent="80" cx="50" cy="50" r="45"></circle>
+                  </svg>
+                  <span class="circle-center-text">80%</span>
+                </div>
+                <div class="circle-label">Warehousing</div>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="progress-circle-wrap">
+                <div class="position-relative d-inline-block">
+                  <svg class="progress-svg" viewBox="0 0 100 100">
+                    <circle class="progress-bg" cx="50" cy="50" r="45"></circle>
+                    <circle class="progress-bar-meter" data-percent="90" cx="50" cy="50" r="45"></circle>
+                  </svg>
+                  <span class="circle-center-text">90%</span>
+                </div>
+                <div class="circle-label">Air Freight</div>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="progress-circle-wrap">
+                <div class="position-relative d-inline-block">
+                  <svg class="progress-svg" viewBox="0 0 100 100">
+                    <circle class="progress-bg" cx="50" cy="50" r="45"></circle>
+                    <circle class="progress-bar-meter" data-percent="70" cx="50" cy="50" r="45"></circle>
+                  </svg>
+                  <span class="circle-center-text">70%</span>
+                </div>
+                <div class="circle-label">Ocean Freight</div>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="progress-circle-wrap">
+                <div class="position-relative d-inline-block">
+                  <svg class="progress-svg" viewBox="0 0 100 100">
+                    <circle class="progress-bg" cx="50" cy="50" r="45"></circle>
+                    <circle class="progress-bar-meter" data-percent="87" cx="50" cy="50" r="45"></circle>
+                  </svg>
+                  <span class="circle-center-text">87%</span>
+                </div>
+                <div class="circle-label">Road Transport</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Content -->
+        <div class="col-lg-6">
+          <div class="eyebrow-serif eyebrow-orange">Supply Chain Technology &amp; Customized Solutions</div>
+          <h2 class="section-title text-white mb-3">Competitive Advantages To The Largest Companies!</h2>
+          <p class="text-white-50 mb-3" style="font-size: 0.92rem; line-height: 1.7;">
+            Metus mauris consectetuer magna quis auctor ligula arcu leo feugiat. Cubilia torquent dui pellentesque cursus sociosqu vulputate auctor.
+          </p>
+          <p class="text-white-50 mb-4" style="font-size: 0.92rem; line-height: 1.7;">
+            Vitae id senectus si enim elit tempor. Eros tincidunt consectetur libero dictumst vulputate velit magnis purus.
+          </p>
+          <a href="#services" class="btn-orange">DISCOVER MORE</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose Us Grid -->
+  <section class="why-choose-section">
+    <div class="container">
+      <div class="row align-items-center mb-5">
+        <div class="col-lg-6">
+          <div class="eyebrow-serif eyebrow-red">Why Choose Us</div>
+          <h2 class="section-title">Experience the benefits of smooth moving</h2>
+        </div>
+        <div class="col-lg-6">
+          <p class="text-muted" style="font-size: 0.95rem; line-height: 1.65;">
+            A non pretium litora adipiscing velit. Felis amet per eros platea ullamcorper a. Torquent sollicitudin pretium inceptos sed gravida tortor ridiculus interdum cubilia ornare.
+          </p>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="why-feature-box">
+            <i class="fa-solid fa-cubes-stacked why-icon"></i>
+            <div>
+              <h4>Customer Satisfaction Tools</h4>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="why-feature-box">
+            <i class="fa-solid fa-tags why-icon"></i>
+            <div>
+              <h4>Freight Payment Options</h4>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="why-feature-box">
+            <i class="fa-solid fa-chart-column why-icon"></i>
+            <div>
+              <h4>Management &amp; Reporting</h4>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="why-feature-box">
+            <i class="fa-solid fa-shield-halved why-icon"></i>
+            <div>
+              <h4>Compliance Solutions</h4>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       7. INDUSTRIES & VIDEO CTA
+  ========================================================= -->
+  <section class="industries-section">
+    <div class="container text-center">
+      <h2 class="section-title mb-4">Whatever your industry, we are your<br />global freight forwarder</h2>
+      <div style="width: 50px; height: 3px; background-color: var(--brand-accent-red); margin: 0 auto 50px auto;"></div>
+
+      <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+          <div class="industry-card">
+            <i class="fa-solid fa-car-side industry-icon"></i>
+            <h3 class="industry-title">Automotive</h3>
+            <p class="industry-desc">Lorem ipsum dolor sit amet consectetur adipiscing elit dolor</p>
+          </div>
+        </div>
+
+        <!-- Featured High-Contrast Card -->
+        <div class="col-lg-4 col-md-6">
+          <div class="industry-card featured-card">
+            <i class="fa-solid fa-microchip industry-icon text-warning"></i>
+            <h3 class="industry-title">Technology</h3>
+            <p class="industry-desc">Lorem ipsum dolor sit amet consectetur adipiscing elit dolor</p>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+          <div class="industry-card">
+            <i class="fa-solid fa-heart-pulse industry-icon"></i>
+            <h3 class="industry-title">Healthcare</h3>
+            <p class="industry-desc">Lorem ipsum dolor sit amet consectetur adipiscing elit dolor</p>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+          <div class="industry-card">
+            <i class="fa-solid fa-seedling industry-icon"></i>
+            <h3 class="industry-title">Renewable Energy</h3>
+            <p class="industry-desc">Lorem ipsum dolor sit amet consectetur adipiscing elit dolor</p>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+          <div class="industry-card">
+            <i class="fa-solid fa-industry industry-icon"></i>
+            <h3 class="industry-title">Industrial</h3>
+            <p class="industry-desc">Lorem ipsum dolor sit amet consectetur adipiscing elit dolor</p>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+          <div class="industry-card">
+            <i class="fa-solid fa-cart-shopping industry-icon"></i>
+            <h3 class="industry-title">Retail/Fashion</h3>
+            <p class="industry-desc">Lorem ipsum dolor sit amet consectetur adipiscing elit dolor</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Maritime Video CTA -->
+  <section class="maritime-cta">
+    <div class="maritime-overlay"></div>
+    <div class="container maritime-content">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+          <h2 class="section-title text-white mb-3">Logistics that is connecting you to endless possibilities</h2>
+          <p class="text-white-50 mb-4" style="max-width: 600px; font-size: 0.95rem; line-height: 1.65;">
+            Consectetur volutpat mi libero laoreet gravida nibh feugiat mus pellentesque. Interdum eu inceptos ultrices egestas sodales iaculis. Parturient porta aptent nam sapien vel suspendisse.
+          </p>
+          <a href="#services" class="btn-orange">DISCOVER MORE</a>
+        </div>
+        <div class="col-lg-4 text-center">
+          <button class="play-pulse-btn" data-bs-toggle="modal" data-bs-target="#videoModal" aria-label="Play Corporate Video">
+            <i class="fa-solid fa-play ms-1"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       8. OUR PORTFOLIO & TESTIMONIALS
+  ========================================================= -->
+  <section class="portfolio-section" id="portfolio">
+    <div class="container text-center">
+      <div class="eyebrow-serif eyebrow-red">Our Portfolio</div>
+      <h2 class="section-title mb-3">Learn how we help our customers<br />achieve their goals</h2>
+      <p class="text-muted mx-auto mb-5" style="max-width: 620px; font-size: 0.95rem;">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.
+      </p>
+
+      <div class="row g-4 text-start">
+        <div class="col-lg-4 col-md-6">
+          <div class="portfolio-card">
+            <div class="portfolio-img-wrap">
+              <span class="portfolio-badge">Distribution, Warehousing</span>
+              <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=700&q=80" alt="Warehousing" />
+            </div>
+            <div class="portfolio-body">
+              <h3 class="portfolio-title">Warehousing and Distribution for Expansion</h3>
+              <p class="text-muted mb-4" style="font-size: 0.88rem; line-height: 1.65;">
+                Dui penatibus cras ultrices cubilia montes. Hac est mattis morbi si molestie ultricies lorem. Iaculis ultrices non primis ac bibendum pharetra mollis aenean lobortis in.
+              </p>
+              <a href="#quote" class="portfolio-readmore">READ MORE &raquo;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+          <div class="portfolio-card">
+            <div class="portfolio-img-wrap">
+              <span class="portfolio-badge">Distribution, Transportation</span>
+              <img src="https://images.unsplash.com/photo-1541427468627-a89a96e5ca1d?auto=format&fit=crop&w=700&q=80" alt="Rail Transport" />
+            </div>
+            <div class="portfolio-body">
+              <h3 class="portfolio-title">Rail Transport Helps Shorten Transit Times</h3>
+              <p class="text-muted mb-4" style="font-size: 0.88rem; line-height: 1.65;">
+                Dui penatibus cras ultrices cubilia montes. Hac est mattis morbi si molestie ultricies lorem. Iaculis ultrices non primis ac bibendum pharetra mollis aenean lobortis in.
+              </p>
+              <a href="#quote" class="portfolio-readmore">READ MORE &raquo;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mx-auto">
+          <div class="portfolio-card">
+            <div class="portfolio-img-wrap">
+              <span class="portfolio-badge">Branding, Logistics</span>
+              <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=700&q=80" alt="Trusted Logistics" />
+            </div>
+            <div class="portfolio-body">
+              <h3 class="portfolio-title">Trusted Logistics Partner and Mutual Core Values</h3>
+              <p class="text-muted mb-4" style="font-size: 0.88rem; line-height: 1.65;">
+                Dui penatibus cras ultrices cubilia montes. Hac est mattis morbi si molestie ultricies lorem. Iaculis ultrices non primis ac bibendum pharetra mollis aenean lobortis in.
+              </p>
+              <a href="#quote" class="portfolio-readmore">READ MORE &raquo;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Carousel -->
+  <section class="testimonials-section" id="testimonials">
+    <div class="testimonials-overlay"></div>
+    <div class="container testimonials-content text-center">
+      <div class="eyebrow-serif eyebrow-orange">Testimonials</div>
+      <h2 class="section-title text-white mb-2">What they say about us</h2>
+      <div class="testimonial-divider"></div>
+
+      <div id="testiCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active" data-bs-interval="5000">
+            <p class="testimonial-quote">
+              &ldquo;Habitant dapibus tellus egestas platea luctus aliquam lacus potenti auctor dictum vel. Egestas facilisi arcu vulputate montes congue malesuada adipiscing aliquet facilisis. Semper erat pede donec mattis rutrum. Meti lobortis amet purus dapibus penatibus augue ex sagittis netus.&rdquo;
+            </p>
+            <div class="testimonial-author">Melissa J. Talley</div>
+            <div class="testimonial-role">Entrepreneur</div>
+          </div>
+
+          <div class="carousel-item" data-bs-interval="5000">
+            <p class="testimonial-quote">
+              &ldquo;Integer feugiat convallis feugiat fusce vel. Porttitor platea lacinia platea class aptent taciti sociosqu ad litora torquent per conubia nostra per inceptos himenaeos semper morbi tristique potenti integer facilisis.&rdquo;
+            </p>
+            <div class="testimonial-author">Robert K. Henderson</div>
+            <div class="testimonial-role">Supply Chain Director</div>
+          </div>
+        </div>
+
+        <div class="carousel-indicators position-relative mt-4 mb-0">
+          <button type="button" data-bs-target="#testiCarousel" data-bs-slide-to="0" class="active"></button>
+          <button type="button" data-bs-target="#testiCarousel" data-bs-slide-to="1"></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       9. PARTNERS, NEWSLETTER & FOOTER
+  ========================================================= -->
+  <section class="partners-section">
+    <div class="container text-center">
+      <div class="brand-heading mb-4 text-dark" style="font-size: 1.15rem; letter-spacing: 0.5px;">Our Partners :</div>
+      <div class="row align-items-center justify-content-center g-4">
+        <div class="col-6 col-md-4 col-lg-2 partner-item">
+          <svg height="34" viewBox="0 0 160 40"><circle cx="20" cy="20" r="14" fill="#333" /><path d="M20 10 L15 21 L21 21 L18 30 L26 19 L20 19 Z" fill="#fff" /><text x="44" y="26" font-family="'Inter', sans-serif" font-weight="700" font-size="19" fill="#333">logoipsum</text></svg>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2 partner-item">
+          <svg height="34" viewBox="0 0 160 40"><circle cx="20" cy="20" r="13" fill="none" stroke="#333" stroke-width="3" /><circle cx="16" cy="18" r="2" fill="#333" /><circle cx="24" cy="18" r="2" fill="#333" /><path d="M17 24 Q20 27 23 24" stroke="#333" stroke-width="2" fill="none" /><text x="44" y="26" font-family="'Inter', sans-serif" font-weight="700" font-size="19" fill="#333">logoipsum</text></svg>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2 partner-item">
+          <svg height="34" viewBox="0 0 160 40"><circle cx="20" cy="20" r="14" fill="#444" /><circle cx="20" cy="20" r="6" fill="#fff" /><path d="M20 6 A14 14 0 0 1 34 20 L26 20 A6 6 0 0 0 20 14 Z" fill="#666" /><text x="44" y="26" font-family="'Inter', sans-serif" font-weight="700" font-size="19" fill="#333">Logoipsum</text></svg>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2 partner-item">
+          <svg height="34" viewBox="0 0 140 40"><text x="10" y="27" font-family="'Oswald', sans-serif" font-weight="800" font-size="24" fill="#333" letter-spacing="3">LOGO</text><rect x="5" y="7" width="22" height="24" fill="none" stroke="#333" stroke-width="3" /></svg>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2 partner-item">
+          <svg height="34" viewBox="0 0 160 40"><path d="M8 29 L16 11 L24 29" stroke="#333" stroke-width="4" stroke-linecap="round" fill="none" /><path d="M22 11 L30 29" stroke="#333" stroke-width="4" stroke-linecap="round" fill="none" /><text x="44" y="26" font-family="'Inter', sans-serif" font-weight="700" font-size="19" fill="#333">Logoipsum</text></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="newsletter-section text-center">
+    <div class="newsletter-overlay"></div>
+    <div class="container newsletter-content">
+      <h2 class="section-title text-white mb-2">Subscribe Our Newsletter</h2>
+      <p class="text-white-50 mb-4" style="font-size: 0.95rem;">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.
+      </p>
+
+      <form id="newsletterForm" class="newsletter-input-group">
+        <input type="email" id="newsEmail" class="newsletter-input" placeholder="Enter your email..." required />
+        <button type="submit" class="btn-orange px-4"><i class="fa-solid fa-lock me-1"></i> SIGN UP</button>
+      </form>
+      <div id="newsAlert" class="text-warning mt-3 small d-none"><i class="fa-solid fa-check-circle me-1"></i> Thank you! Your email has been subscribed.</div>
+    </div>
+  </section>
+
+  <!-- Main Footer -->
+  <footer class="footer-main" id="contact">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+          <a class="brand-logo-wrap mb-3" href="#">
+            <svg width="40" height="32" viewBox="0 0 54 44" fill="none">
+              <path d="M4 8 L24 22 L4 36 Z" fill="#c0292b" />
+              <path d="M18 8 L38 22 L18 36 Z" fill="#0b5cab" />
+              <path d="M32 8 L52 22 L32 36 Z" fill="#07386d" />
+            </svg>
+            <div>
+              <span class="brand-name text-white">DeCargo</span>
+              <span class="brand-sub">DELIVERY LOGISTIC</span>
+            </div>
+          </a>
+          <p class="mb-1 text-light">Jln Cempaka Wangi No 22, Jakarta Indonesia</p>
+          <p class="mb-1 text-light">+6221.2002.2012</p>
+          <p class="mb-3 text-light">support@yourdomain.tld</p>
+          <div class="d-flex gap-2">
+            <a href="#" class="social-btn"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="social-btn"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#" class="social-btn"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#" class="social-btn"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="social-btn"><i class="fa-brands fa-behance"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-6">
+          <div class="footer-col-title">Company</div>
+          <ul class="footer-links">
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#careers">Careers</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#portfolio">Case Studies</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-6">
+          <div class="footer-col-title">Services</div>
+          <ul class="footer-links">
+            <li><a href="#services">Ocean Freight</a></li>
+            <li><a href="#services">Road Transport</a></li>
+            <li><a href="#services">Air Freight</a></li>
+            <li><a href="#services">Warehousing</a></li>
+            <li><a href="#services">Cargo Insurance</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-col-title">Quick Links</div>
+          <ul class="footer-links">
+            <li><a href="#quote">Request A Quote</a></li>
+            <li><a href="#tracking">Track &amp; Trace</a></li>
+            <li><a href="#locations">Find A Location</a></li>
+            <li><a href="#faq">Help &amp; FAQ</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Copyright -->
+  <div class="footer-bottom">
+    <div class="container d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <div>&copy; <span id="currentYear"></span> DeCargo, All rights reserved</div>
+      <div>
+        <a href="#">Privacy</a> &middot;
+        <a href="#">Terms</a> &middot;
+        <a href="#">Sitemap</a>
+      </div>
+      <div>Presented by MaxCreative</div>
+    </div>
+  </div>
+
+  <!-- Video Modal -->
+  <div class="modal fade" id="videoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content bg-dark border-0">
+        <div class="modal-header border-0 pb-0">
+          <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="ratio ratio-16x9">
+            <iframe id="videoIframe" src="https://www.youtube.com/embed/dQw4w9WgXcQ?enablejsapi=1" title="Logistics Video" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5.3 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Complete Interactive JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Set current year dynamically
+      document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+      // 2. Animated Stats Counters
+      const counters = document.querySelectorAll('.counter');
+      let statsCounted = false;
+
+      const runCounters = () => {
+        counters.forEach(counter => {
+          const target = +counter.getAttribute('data-target');
+          let count = 0;
+          const increment = Math.ceil(target / 60);
+
+          const updateNumber = () => {
+            count += increment;
+            if (count < target) {
+              counter.textContent = count.toLocaleString();
+              requestAnimationFrame(updateNumber);
+            } else {
+              counter.textContent = target.toLocaleString();
+            }
+          };
+          updateNumber();
+        });
+      };
+
+      // 3. Animated Circular Meters
+      const progressMeters = document.querySelectorAll('.progress-bar-meter');
+      let circlesFilled = false;
+
+      const runCircles = () => {
+        const circumference = 283; // 2 * pi * 45
+        progressMeters.forEach(meter => {
+          const percent = meter.getAttribute('data-percent');
+          const offset = circumference - (percent / 100) * circumference;
+          meter.style.strokeDashoffset = offset;
+        });
+      };
+
+      // Intersection Observer for scroll animations
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            if (!statsCounted && entry.target.classList.contains('numbers-banner')) {
+              runCounters();
+              statsCounted = true;
+            }
+            if (!circlesFilled && entry.target.classList.contains('advantages-section')) {
+              runCircles();
+              circlesFilled = true;
+            }
+          }
+        });
+      }, { threshold: 0.3 });
+
+      const numbersSection = document.querySelector('.numbers-banner');
+      const advantagesSection = document.querySelector('.advantages-section');
+      if (numbersSection) observer.observe(numbersSection);
+      if (advantagesSection) observer.observe(advantagesSection);
+
+      // 4. Tracking demo form
+      const trackForm = document.getElementById('trackForm');
+      if (trackForm) {
+        trackForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const input = trackForm.querySelector('input');
+          if (input.value.trim() !== '') {
+            alert(`[DeCargo Tracking Demo]\nPackage "${input.value}" is currently: IN TRANSIT (Singapore Anchorage Port).`);
+            input.value = '';
+          }
+        });
+      }
+
+      // 5. Newsletter form handling
+      const newsletterForm = document.getElementById('newsletterForm');
+      const newsAlert = document.getElementById('newsAlert');
+      if (newsletterForm) {
+        newsletterForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          newsAlert.classList.remove('d-none');
+          newsletterForm.reset();
+          setTimeout(() => {
+            newsAlert.classList.add('d-none');
+          }, 4500);
+        });
+      }
+
+      // 6. Stop video when modal closes
+      const videoModal = document.getElementById('videoModal');
+      const videoIframe = document.getElementById('videoIframe');
+      if (videoModal && videoIframe) {
+        videoModal.addEventListener('hidden.bs.modal', () => {
+          const currentSrc = videoIframe.src;
+          videoIframe.src = '';
+          videoIframe.src = currentSrc;
+        });
+      }
+    });
+  </script>
+</body>
+</html>
